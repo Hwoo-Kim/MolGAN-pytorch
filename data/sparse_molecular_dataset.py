@@ -5,6 +5,7 @@ import numpy as np
 
 from rdkit import Chem
 from datetime import datetime
+from tqdm import tqdm
 
 
 class SparseMolecularDataset():
@@ -38,7 +39,7 @@ class SparseMolecularDataset():
             self.data = [Chem.MolFromSmiles(line) for line in open(filename, 'r').readlines()]
 
         self.data = list(map(Chem.AddHs, self.data)) if add_h else self.data
-        self.data = list(filter(filters, self.data))
+        #self.data = list(filter(filters, self.data))
         self.data = self.data[:size]
 
         self.log('Extracted {} out of {} molecules {}adding Hydrogen!'.format(len(self.data),
@@ -107,7 +108,7 @@ class SparseMolecularDataset():
         max_length = max(mol.GetNumAtoms() for mol in self.data)
         max_length_s = max(len(Chem.MolToSmiles(mol)) for mol in self.data)
 
-        for i, mol in enumerate(self.data):
+        for i, mol in tqdm(enumerate(self.data)):
             A = self._genA(mol, connected=True, max_length=max_length)
             D = np.count_nonzero(A, -1)
             if A is not None:
@@ -288,9 +289,14 @@ class SparseMolecularDataset():
 
 
 if __name__ == '__main__':
+    import sys
+    target, save_name = sys.argv[1], sys.argv[2]
     data = SparseMolecularDataset()
-    data.generate('gdb9.sdf', filters=lambda x: x.GetNumAtoms() <= 9)
-    data.save('gdb9_9nodes.sparsedataset')
+    #data.generate('gdb9.sdf', filters=lambda x: x.GetNumAtoms() <= 9)
+    #data.save('gdb9_9nodes.sparsedataset')
+    #data.generate('sampled_ChEMBL.smi', filters=lambda x: x.GetNumAtoms() <= 9)
+    data.generate(target, filters=lambda x: x.GetNumAtoms() <= 9)
+    data.save(save_name)
 
     # data = SparseMolecularDataset()
     # data.generate('data/qm9_5k.smi', validation=0.00021, test=0.00021)  # , filters=lambda x: x.GetNumAtoms() <= 9)

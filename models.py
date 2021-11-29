@@ -75,9 +75,9 @@ class Discriminator(nn.Module):
     def forward(self, adj, hidden, node, activatation=None):
         adj = adj[:,:,:,1:].permute(0,3,1,2)
         annotations = torch.cat((hidden, node), -1) if hidden is not None else node
-        h = self.gcn_layer(annotations, adj)
+        h = self.gcn_layer(annotations, adj)        #h: [16,45,64]
         annotations = torch.cat((h, hidden, node) if hidden is not None\
-                                 else (h, node), -1)
+                else (h, node), -1)        #annotations: [16,45,83]
         h = self.agg_layer(annotations, torch.tanh)
         h = self.linear_layer(h)
 

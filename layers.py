@@ -39,14 +39,17 @@ class GraphConvolution(Module):
 class GraphAggregation(Module):
 
     def __init__(self, in_features, out_features, b_dim, dropout):
+        b_dim=18        # (num atom types+1)가 되어야 함. 의미 해석 다함.
         super(GraphAggregation, self).__init__()
         self.sigmoid_linear = nn.Sequential(nn.Linear(in_features+b_dim, out_features),
                                             nn.Sigmoid())
+        #print(f'self.sigmoid_linear, {in_features+b_dim}, {out_features}')
         self.tanh_linear = nn.Sequential(nn.Linear(in_features+b_dim, out_features),
                                          nn.Tanh())
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, input, activation):
+        #print(f'input, {input.size()}')
         i = self.sigmoid_linear(input)
         j = self.tanh_linear(input)
         output = torch.sum(torch.mul(i,j), 1)

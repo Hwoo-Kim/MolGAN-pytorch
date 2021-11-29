@@ -1,0 +1,2 @@
+Chembl data was filtered by followings: 1839684
+1) NoStar  2) OneMol  3) Sanitize
