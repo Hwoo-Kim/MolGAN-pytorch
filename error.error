@@ -1,0 +1,6 @@
+/home/wykgroup/hwkim/MolGAN/utils.py:65: RuntimeWarning: Mean of empty slice.
+  return MolecularMetrics.novel_scores(MolecularMetrics.valid_filter(mols), data).mean()
+/home/wykgroup/mseok/appl/mambaforge/envs/HWKim/lib/python3.6/site-packages/numpy/core/_methods.py:170: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+/home/wykgroup/hwkim/MolGAN/solver.py:344: RuntimeWarning: Mean of empty slice.
+  m0 = {k: np.array(v)[np.nonzero(v)].mean() for k, v in m0.items()}

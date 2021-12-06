@@ -3,7 +3,8 @@ import argparse
 from solver import Solver
 from data_loader import get_loader
 from torch.backends import cudnn
-
+from rdkit import RDLogger
+RDLogger.DisableLog('rdApp.*')
 
 def str2bool(v):
     return v.lower() in ('true')
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('--n_critic', type=int, default=5, help='number of D updates per each G update')
     parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for Adam optimizer')
     parser.add_argument('--beta2', type=float, default=0.999, help='beta2 for Adam optimizer')
-    parser.add_argument('--resume_iters', type=int, default=None, help='resume training from this step')
+    parser.add_argument('--resume_iters', type=int, default=30000, help='resume training from this step')
 
     # Test configuration.
     parser.add_argument('--test_iters', type=int, default=200000, help='test model from this step')
@@ -82,5 +83,4 @@ if __name__ == '__main__':
     config = parser.parse_args()
     print(config)
     import os
-    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     main(config)

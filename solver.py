@@ -6,7 +6,7 @@ import datetime
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
-from torchvision.utils import save_image
+#from torchvision.utils import save_image
 
 from utils import *
 from models import Generator, Discriminator
@@ -229,6 +229,12 @@ class Solver(object):
 
         # Start training.
         print('Start training...')
+        if os.path.isfile(self.log_dir+'/train.log'):
+            pass
+        else:
+            with open(self.log_dir+'/train.log','w') as fr:
+                fr.write('Start training...\n')
+
         start_time = time.time()
         for i in range(start_iters, self.num_iters):
             if (i+1) % self.log_step == 0:
@@ -341,6 +347,8 @@ class Solver(object):
                 for tag, value in loss.items():
                     log += ", {}: {:.4f}".format(tag, value)
                 print(log)
+                with open(self.log_dir+'/train.log','a') as fw:
+                    fw.write(log+'\n')
 
                 if self.use_tensorboard:
                     for tag, value in loss.items():
